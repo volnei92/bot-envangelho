@@ -6,15 +6,15 @@ from PyPDF2 import PdfReader
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# Aplicar nest_asyncio para permitir loops de evento aninhados
+# Permitir loops de evento aninhados
 nest_asyncio.apply()
 
 # Configuração de logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-# Variáveis de configuração
-TOKEN = os.getenv('TELEGRAM_TOKEN')  # Obter o token do bot a partir de variáveis de ambiente
-PDF_FILE_PATH = './evangelho.pdf'  # Nome do arquivo PDF que será carregado
+# Obtendo o token do bot e o caminho do PDF
+TOKEN = os.getenv('TELEGRAM_TOKEN')  # Token do bot via variável de ambiente
+PDF_FILE_PATH = './evangelho.pdf'  # Nome do arquivo PDF
 
 def read_pdf(file_path):
     """Lê o PDF e retorna o texto em uma lista de parágrafos."""
@@ -47,12 +47,8 @@ async def leitura(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 def main() -> None:
     """Inicia o bot."""
     application = ApplicationBuilder().token(TOKEN).build()
-
-    # Adiciona manipuladores de comandos
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("leitura", leitura))
-
-    # Inicia o bot, executando em modo polling
     application.run_polling()
 
 # Ponto de entrada do programa
